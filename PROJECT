@@ -10,4 +10,14 @@ plugins:
   scorecard.sdk.operatorframework.io/v2: {}
 projectName: storage-spaces-health-monitor
 repo: github.com/JakeGilb/storage_spaces_health_monitor
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: storage-spaces.monitor.com
+  group: monitor
+  kind: StorageSpaceMonitor
+  path: github.com/JakeGilb/storage_spaces_health_monitor/api/v1alpha1
+  version: v1alpha1
 version: "3"

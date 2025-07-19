@@ -1,0 +1,9 @@
+apiVersion: monitor.storage-spaces.monitor.com/v1alpha1
+kind: StorageSpaceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/name: storage-spaces-health-monitor
+    app.kubernetes.io/managed-by: kustomize
+  name: storagespacemonitor-sample
+spec:
+  # TODO(user): Add fields here
