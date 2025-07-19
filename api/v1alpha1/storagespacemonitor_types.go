@@ -37,6 +37,24 @@ type PoolStatus struct {
 }
 
 // StorageSpaceMonitorStatus defines the observed state of StorageSpaceMonitor.
+// Example pool status:
+// Get-StoragePool | Select-Object FriendlyName, HealthStatus | ConvertTo-Json
+// [
+//
+//	{
+//		"FriendlyName": "Plex Entertainment Pool",
+//		"HealthStatus": "Healthy"
+//	},
+//	{
+//		"FriendlyName": "Cloud Pool",
+//		"HealthStatus": "Healthy"
+//	},
+//	{
+//		"FriendlyName": "Primordial",
+//		"HealthStatus": "Healthy"
+//	}
+//
+// ]
 type StorageSpaceMonitorStatus struct {
 	// PoolStatuses contains the health status of monitored pools
 	PoolStatuses []PoolStatus `json:"poolStatuses,omitempty"`

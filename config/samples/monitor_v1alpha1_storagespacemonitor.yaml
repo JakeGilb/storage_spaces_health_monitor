@@ -6,4 +6,8 @@ metadata:
     app.kubernetes.io/managed-by: kustomize
   name: storagespacemonitor-sample
 spec:
-  # TODO(user): Add fields here
+  size: 3
+  pools:
+    - Plex Entertainment Pool
+    - Cloud Pool
+    - Primordial

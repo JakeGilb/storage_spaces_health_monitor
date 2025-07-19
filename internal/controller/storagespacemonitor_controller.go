@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,7 @@ package controller
 
 import (
 	"context"
+	"time"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -47,11 +48,52 @@ type StorageSpaceMonitorReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.21.0/pkg/reconcile
 func (r *StorageSpaceMonitorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = logf.FromContext(ctx)
+	logger := logf.FromContext(ctx)
 
-	// TODO(user): your logic here
+	// Fetch the StorageSpaceMonitor resource
+	var monitor monitorv1alpha1.StorageSpaceMonitor
+	if err := r.Get(ctx, req.NamespacedName, &monitor); err != nil {
+		logger.Error(err, "unable to fetch StorageSpaceMonitor")
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
+
+	// Simulate health check for each pool in Spec.Pools
+	var statuses []monitorv1alpha1.PoolStatus
+	for _, poolName := range monitor.Spec.Pools {
+		// Simulate: all pools healthy except "Primordial" (for demo)
+		health := "Healthy"
+		if poolName == "Primordial" {
+			health = "Unhealthy"
+		}
+		statuses = append(statuses, monitorv1alpha1.PoolStatus{
+			FriendlyName: poolName,
+			HealthStatus: health,
+		})
+	}
+
+	// Update status if changed
+	if !equalPoolStatuses(monitor.Status.PoolStatuses, statuses) {
+		monitor.Status.PoolStatuses = statuses
+		if err := r.Status().Update(ctx, &monitor); err != nil {
+			logger.Error(err, "unable to update StorageSpaceMonitor status")
+			return ctrl.Result{RequeueAfter: time.Minute}, err
+		}
+	}
 
 	return ctrl.Result{}, nil
+}
+
+// equalPoolStatuses compares two slices of PoolStatus
+func equalPoolStatuses(a, b []monitorv1alpha1.PoolStatus) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i].FriendlyName != b[i].FriendlyName || a[i].HealthStatus != b[i].HealthStatus {
+			return false
+		}
+	}
+	return true
 }
 
 // SetupWithManager sets up the controller with the Manager.

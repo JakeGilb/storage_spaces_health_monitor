@@ -47,7 +47,12 @@ spec:
                 type: array
             type: object
           status:
-            description: StorageSpaceMonitorStatus defines the observed state of StorageSpaceMonitor.
+            description: "StorageSpaceMonitorStatus defines the observed state of
+              StorageSpaceMonitor.\nExample pool status:\nGet-StoragePool | Select-Object
+              FriendlyName, HealthStatus | ConvertTo-Json\n[\n\n\t{\n\t\t\"FriendlyName\":
+              \"Plex Entertainment Pool\",\n\t\t\"HealthStatus\": \"Healthy\"\n\t},\n\t{\n\t\t\"FriendlyName\":
+              \"Cloud Pool\",\n\t\t\"HealthStatus\": \"Healthy\"\n\t},\n\t{\n\t\t\"FriendlyName\":
+              \"Primordial\",\n\t\t\"HealthStatus\": \"Healthy\"\n\t}\n\n]"
             properties:
               poolStatuses:
                 description: PoolStatuses contains the health status of monitored

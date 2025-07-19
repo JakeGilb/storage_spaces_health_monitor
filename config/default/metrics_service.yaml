@@ -5,7 +5,7 @@ metadata:
     control-plane: controller-manager
     app.kubernetes.io/name: storage-spaces-health-monitor
     app.kubernetes.io/managed-by: kustomize
-  name: controller-manager-metrics-service
+  name: storage-spaces-metrics
   namespace: system
 spec:
   ports:
